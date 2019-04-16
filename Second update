@@ -1,0 +1,104 @@
+import time
+
+wait={}
+
+def wait_list(wait1,x,y):
+    l=len(wait1)
+    if x in wait1:
+        del wait1[x]
+        l=l-1
+    d={x:y}    
+    wait1.update(d)
+        
+
+def get_min(d1,n):
+    min_ = 1000
+    in_ = 0
+    for i in range (n):
+        if dict1[i][0]<min_:
+            min_ = d1[i][0]
+            in_ = i
+    return (in_)
+
+def search_arrival(d1,x,n):
+    in_ = -2
+    v=list(d1.values())
+    if x in v:
+        in_=v.index(x)
+    if in_>-2:
+        return (in_)
+    else:
+        return(-1)
+    
+def search_busrt(d1,x,n):
+    in_ = 0
+    for i in range (n):
+        if dict1[i][0]==x:
+            in_ = i
+    if in_>0:
+        return (in_)
+    else:
+        return(-1)
+
+def run(d1,x,y,pr,arr,ol,nx,n,wait1):
+    if x<=arr:
+        p=search_arrival(d1,x,n)
+        if p!=-1:
+            print("process",p+1,"has arrived")
+            if d1[p][0]>pr:
+                print("It has less priority\n SO old process continues")
+                d1[ol][0]-=1
+                wait_list(wait1,p,d1[p][0])
+            else:
+                print("process pre-empted\nprocess",(p+1),"running");
+                d1[p][0]-=1
+                wait_list(d1,ol,d1[ol][0])
+                ol=p
+    else:
+        nx=get_min(wait1,n)
+        print("process",(nx+1),"re-arrived\n")
+        if d1[nx][0]<d1[ol][0]:
+            wait_list(d1,ol,d1[ol][0])
+            ol=nx
+            d1[nx][0]-=1
+            print("process",(nx+1),"pre-empted running process")
+        else:
+            print("priority is less\ goes to wait list\n")
+            d1[ol][0]-=1
+            wait_list(wait1,nx,d1[nx][0])
+        
+
+N=int(input("Enter the number of processes to be executed\n"))
+
+print("enter burst time and arrival time of processes\n (seperated by space)")
+print("example:\nBURST ARRIVAL\n2     4\n")
+
+dict1={}
+for i in range (N):
+    dict1[i]=list(map(int,input().split()))
+
+priority=0
+burst_count=0
+max_arr=0
+for i in range (N):
+        if dict1[i][0]>priority:
+            priority = dict1[i][0]
+            in_ = i
+        burst_count+=dict1[i][0]
+        
+        if dict1[i][1]>max_arr:
+            max_arr=dict1[i][1]
+
+i=0
+t=0
+old=0
+next_=0
+
+while(1):
+        
+    run(dict1,i,burst_count,priority,max_arr,old,next_,N,wait)
+    i=i+1
+    if burst_count==0:
+        print("All processes have executed successfully")
+        break
+    time.sleep(1)
