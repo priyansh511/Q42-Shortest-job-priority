@@ -1,0 +1,82 @@
+import time
+
+process=[]
+arrival=[]
+burst=[]
+
+N=int(input("Enter number of processes to be executed\n"))
+print("Enter process name, burst time and arrival time\n")
+print("Example: p1 2 3\n")
+for i in range(N):
+    x,y,z=input().split()
+    process.append(x)
+    burst.append(int(y))
+    arrival.append(int(z))
+
+i=0
+priority=1000
+burst_count=sum(burst)
+max_arrival=max(arrival)
+old=0
+next_
+
+while(1):
+    if burst_count==0:
+        print("\nAll processes are executed sucessfully")
+        break
+    
+    else:
+        if i==min(arrival):
+            print("\nProcess p1 arrived and running")
+            burst[i]-=1
+            priority=burst[i]
+            old=i
+            if burst[i]==0:
+                print("\nprocess p1 finished executing")
+                priority=burst[i+1]
+                old=i+1
+                burst.remove(i)
+                arrival.remove(i)
+                process.remove(i)
+                
+            
+        else:
+            
+                
+            if i<=max_arrival:
+                if i in arrival:
+                    print("\nProcess",process[i],"arrived\n")
+                    print("Burst time=",burst[i])
+                    if burst[i]<priority:
+                        print("\nProcess",process[i],"pre-empts process",process[old])
+                        print("\nProcess",process[i],"running\n")
+                        old=i
+                    print("Burst time of running process reduced by 1 sec")
+                    burst[old]-=1
+                    priority=burst[old]
+                    
+                if burst[i]==0:
+                    print("\nprocess",process[i],"finished executing")
+                    priority=burst[burst.index(min(burst))]
+                    old=burst.index(min(burst))
+                    burst.remove(i)
+                    arrival.remove(i)
+                    process.remove(i)            
+            else:
+                next_=burst.index(min(burst))
+                if burst[next_]<priority:
+                    print("\nProcess",process[next_],"pre-empts process",process[old])
+                    print("\nProcess",process[next_],"running\n")
+                    print("Burst time=",burst[next_])
+                    old=next_
+                else:
+                    print("\nProcess",process[old],"running\n")
+                
+                print("Burst time of running process reduced by 1 sec")
+                burst[old]-=1
+                priority=burst[old]
+                print("Burst time=",burst[old])
+        i=i+1
+        if i>=min(arrival)
+            burst_count-=1
+        time.sleep(1)
